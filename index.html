@@ -28,6 +28,14 @@
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
     }
 
+    header{
+      background-color: #d81b60;
+      margin-bottom: 12px #921543;
+    }
+
+    .tittle-mural{
+      color: rgb(255, 207, 249);
+    }
     body { 
       background: var(--bg-gradient); 
       min-height: 100vh;
@@ -315,14 +323,14 @@
   </style>
 </head>
 <body>
-
-  <h1>Mural Anônimo ✉</h1>
+<header class="hdr-container">
+  <h1 class="tittle-mural">Mural Anônimo ✉</h1>
   
   <div class="acoes-topo">
     <button class="btn-acao" onclick="toggleFormulario()">+ Nova Postagem</button>
     <button class="btn-acao" onclick="togglePesquisa()">🔍 Pesquisar</button>
   </div>
-  
+</header>
   <div id="form-container"></div>
   <div id="search-container"></div>
   <div id="filtro-container"></div>
