@@ -215,7 +215,7 @@
   <div id="search-container"></div>
   <div id="filtro-container"></div>
 
-  <div id="feed">◌ Carregando postagens...</div>
+  <div id="feed">◌Carregando postagens...</div>
 
   <script>
     const SUPABASE_URL = "https://kfmoxvwekopghyyjvmur.supabase.co"; 
@@ -383,12 +383,12 @@
         const jaCurtido = curtidasLocais.includes(post.id);
 
         card.innerHTML = `
-          <div class="box emoji-box">${post.emoji || '❤️'}</div>
+          <div class="box emoji-box">${post.emoji || '𖹭'}</div>
           <div class="box texto-box">${post.texto}</div>
           <div class="box hashtags-box">${hashtagsTexto}</div>
           
           <div class="box likes-box">
-            <span>❤️ ${post.likes || 0} Likes</span>
+            <span>𖹭 ${post.likes || 0} Likes</span>
             <button 
               class="btn-like" 
               onclick="curtirPost(${post.id}, ${post.likes || 0})"
