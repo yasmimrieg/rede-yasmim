@@ -9,165 +9,259 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; }
-    body { background-color: #e0a8bf; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-    h1 { margin-bottom: 16px; color: #333333; }
+    :root {
+      --bg-gradient: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
+      --card-bg: #ffffff;
+      --primary: #d81b60;
+      --primary-hover: #c2185b;
+      --text-main: #2c3e50;
+      --text-muted: #7f8c8d;
+      --border-radius: 16px;
+      --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 8px 24px rgba(216, 27, 96, 0.12);
+    }
+
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+    }
+
+    body { 
+      background: var(--bg-gradient); 
+      min-height: 100vh;
+      padding: 40px 20px; 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      color: var(--text-main);
+    }
+
+    h1 { 
+      margin-bottom: 24px; 
+      color: #880e4f; 
+      font-weight: 800;
+      font-size: 2rem;
+      letter-spacing: -0.5px;
+    }
     
     /* Container para os botões do topo */
     .acoes-topo {
       display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
+      gap: 12px;
+      margin-bottom: 24px;
     }
 
     .btn-acao {
       border: none;
-      padding: 10px 18px;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: bold;
+      padding: 12px 22px;
+      border-radius: 24px;
+      font-size: 0.95rem;
+      font-weight: 600;
       cursor: pointer;
-      color: rgb(240, 189, 215);
+      color: white;
+      background: var(--primary);
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
-    .btn-acao:active { transform: scale(0.98); }
 
-    .btn-novo-post { background: #a2026d; box-shadow: 2px 2px 0px #580647; }
-    .btn-pesquisar { background: #a2026d; box-shadow: 2px 2px 0px #580647; }
+    .btn-acao:hover { 
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .btn-acao:active { transform: translateY(0); }
 
     /* Containers dinâmicos */
     #form-container, #search-container {
       width: 100%;
-      max-width: 450px;
-      margin-bottom: 20px;
+      max-width: 460px;
+      margin-bottom: 24px;
     }
 
     /* Estilo genérico dos cards de formulários */
     .form-card {
-      background: rgb(239, 157, 209);
-      border: 2px solid #331d2a;
-      border-radius: 16px;
-      padding: 16px;
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 20px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      box-shadow: 4px 4px 0px #222;
+      gap: 12px;
+      box-shadow: var(--shadow-md);
     }
 
     .form-card input, .form-card textarea {
       width: 100%;
-      padding: 8px 12px;
-      border: 2px solid #331d2a;
-      border-radius: 8px;
+      padding: 12px 16px;
+      border: 1px solid #f2d6e4;
+      background-color: #fff5f8;
+      border-radius: 10px;
       font-size: 0.95rem;
+      color: var(--text-main);
+      outline: none;
+      transition: border-color 0.2s ease;
     }
 
-    .form-card textarea { resize: vertical; min-height: 70px; }
+    .form-card input:focus, .form-card textarea:focus {
+      border-color: var(--primary);
+      background-color: #fff;
+    }
+
+    .form-card textarea { resize: vertical; min-height: 80px; }
 
     .form-acoes {
       display: flex;
       gap: 10px;
       justify-content: flex-end;
+      margin-top: 4px;
     }
 
     .btn-cancelar {
-      background: #ebc8df;
-      border: 2px solid #331d2a;
-      padding: 8px 14px;
+      background: #f1f5f9;
+      color: var(--text-muted);
+      border: none;
+      padding: 10px 18px;
       border-radius: 8px;
       cursor: pointer;
-      font-weight: bold;
+      font-weight: 600;
+      transition: background 0.2s;
     }
+    .btn-cancelar:hover { background: #e2e8f0; }
 
     .btn-enviar {
-      background: #b91086;
+      background: var(--primary);
       color: white;
-      border: 2px solid #331d2a;
-      padding: 8px 14px;
+      border: none;
+      padding: 10px 18px;
       border-radius: 8px;
       cursor: pointer;
-      font-weight: bold;
+      font-weight: 600;
+      transition: background 0.2s;
     }
+    .btn-enviar:hover { background: var(--primary-hover); }
 
     /* Feedback do Filtro Ativo */
     .filtro-ativo {
-      background: #cba2c6;
-      border: 2px solid #331d2a;
-      padding: 8px 12px;
-      border-radius: 8px;
-      margin-bottom: 16px;
+      background: white;
+      border-radius: 30px;
+      padding: 10px 20px;
+      margin-bottom: 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       width: 100%;
-      max-width: 450px;
-      font-weight: bold;
-      color: #a33077;
+      max-width: 460px;
+      font-weight: 600;
+      color: var(--primary);
+      box-shadow: var(--shadow-sm);
     }
 
     .btn-limpar-filtro {
       background: transparent;
       border: none;
-      color: #ef44ca;
-      font-weight: bold;
+      color: #e91e63;
+      font-weight: 700;
       cursor: pointer;
+      margin-left: 10px;
     }
 
-    #feed { display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 450px; }
+    #feed { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 20px; 
+      width: 100%; 
+      max-width: 460px; 
+    }
 
     /* Card da Postagem */
     .card {
-      background: white;
-      border: 2px solid #331d2a;
-      border-radius: 16px;
-      padding: 16px;
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 20px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      box-shadow: 4px 4px 0px #331d2a;
+      gap: 14px;
+      box-shadow: var(--shadow-md);
+      transition: transform 0.2s ease;
     }
 
-    .box {
-      border: 2px solid #331d2a;
-      border-radius: 12px;
-      padding: 12px;
+    .emoji-box { 
+      font-size: 2.2rem; 
       text-align: center;
+      line-height: 1;
     }
 
-    .emoji-box { font-size: 2.5rem; background: #fff; }
-    .texto-box { font-size: 1.1rem; color: #222; text-align: left; }
-    .hashtags-box { color: #eb25d7; font-size: 0.9rem; font-weight: bold; }
+    .texto-box { 
+      font-size: 1.05rem; 
+      color: var(--text-main); 
+      line-height: 1.5;
+      word-break: break-word;
+    }
+
+    .hashtags-box { 
+      color: #d81b60; 
+      font-size: 0.85rem; 
+      font-weight: 600; 
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
 
     .likes-box {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-weight: bold;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      border-top: 1px solid #fce4ec;
+      border-bottom: 1px solid #fce4ec;
+      padding: 10px 0;
     }
 
     .btn-like {
-      background: #ff47d1;
-      color: white;
+      background: #fce4ec;
+      color: var(--primary);
       border: none;
-      padding: 6px 12px;
-      border-radius: 6px;
+      padding: 8px 16px;
+      border-radius: 20px;
       cursor: pointer;
-      font-weight: bold;
+      font-weight: 600;
+      transition: all 0.2s ease;
     }
-    .btn-like:active { transform: scale(0.95); }
     
-    /* Estilo para quando o botão estiver desabilitado/curtido */
+    .btn-like:hover:not(:disabled) {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-like:active:not(:disabled) { transform: scale(0.95); }
+    
+    /* Estado desabilitado (curtido) */
     .btn-like:disabled {
-      background: #cbd5e1;
-      color: #8b6485;
-      cursor: not-allowed;
-      transform: none;
+      background: #f8bbd0;
+      color: #880e4f;
+      cursor: default;
+      opacity: 0.8;
     }
 
     .comentarios-box {
-      text-align: left;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
+    }
+
+    .comentarios-titulo {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
     .lista-comentarios {
@@ -175,30 +269,48 @@
       display: flex;
       flex-direction: column;
       gap: 6px;
-      margin-bottom: 8px;
     }
 
     .lista-comentarios li {
-      background: #f1f2f6;
-      padding: 6px 10px;
-      border-radius: 6px;
-      font-size: 0.85rem;
+      background: #f8fafc;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      color: #475569;
+      word-break: break-word;
     }
 
-    .form-comentario { display: flex; gap: 6px; }
+    .form-comentario { display: flex; gap: 8px; margin-top: 4px; }
+    
     .form-comentario input {
       flex: 1;
-      padding: 6px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+      padding: 8px 12px;
+      border: 1px solid #e2e8f0;
+      background: #f8fafc;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      outline: none;
     }
+    
+    .form-comentario input:focus {
+      border-color: var(--primary);
+      background: #fff;
+    }
+
     .form-comentario button {
-      padding: 6px 12px;
+      padding: 8px 16px;
       border: none;
-      background: #331d2a;
+      background: var(--primary);
       color: white;
-      border-radius: 6px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.88rem;
       cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .form-comentario button:hover {
+      background: var(--primary-hover);
     }
   </style>
 </head>
@@ -207,15 +319,15 @@
   <h1>Mural Anônimo ✉</h1>
   
   <div class="acoes-topo">
-    <button class="btn-acao btn-novo-post" onclick="toggleFormulario()">+ Nova Postagem</button>
-    <button class="btn-acao btn-pesquisar" onclick="togglePesquisa()">⌕Pesquisar</button>
+    <button class="btn-acao" onclick="toggleFormulario()">+ Nova Postagem</button>
+    <button class="btn-acao" onclick="togglePesquisa()">🔍 Pesquisar</button>
   </div>
   
   <div id="form-container"></div>
   <div id="search-container"></div>
   <div id="filtro-container"></div>
 
-  <div id="feed">◌Carregando postagens...</div>
+  <div id="feed">Carregando postagens...</div>
 
   <script>
     const SUPABASE_URL = "https://kfmoxvwekopghyyjvmur.supabase.co"; 
@@ -229,7 +341,6 @@
 
     let hashtagAtual = null;
 
-    // --- MÉTODOS DE CONTROLE DO LOCALSTORAGE ---
     function getCurtidasLocais() {
       const curtidas = localStorage.getItem("curtidas_mural");
       return curtidas ? JSON.parse(curtidas) : [];
@@ -243,7 +354,6 @@
       }
     }
 
-    // Alterna o formulário de criação
     function toggleFormulario() {
       searchContainerEl.innerHTML = "";
       if (formContainerEl.innerHTML !== "") {
@@ -265,7 +375,6 @@
       `;
     }
 
-    // Alterna o formulário de pesquisa
     function togglePesquisa() {
       formContainerEl.innerHTML = "";
       if (searchContainerEl.innerHTML !== "") {
@@ -278,13 +387,12 @@
           <input type="text" id="input-busca-hashtag" placeholder="Digite a hashtag (ex: #dev ou dev)" required />
           <div class="form-acoes">
             <button type="button" class="btn-cancelar" onclick="togglePesquisa()">Cancelar</button>
-            <button type="submit" class="btn-enviar" style="background:#8b5cf6;">Buscar</button>
+            <button type="submit" class="btn-enviar">Buscar</button>
           </div>
         </form>
       `;
     }
 
-    // Executa o filtro de busca
     function executarPesquisa(event) {
       event.preventDefault();
       let term = document.getElementById("input-busca-hashtag").value.trim();
@@ -298,14 +406,12 @@
       carregarPostagens();
     }
 
-    // Limpa a busca e volta ao feed normal
     function limparFiltro() {
       hashtagAtual = null;
       filtroContainerEl.innerHTML = "";
       carregarPostagens();
     }
 
-    // Envia o novo post para o Supabase
     async function criarPostagem(event) {
       event.preventDefault();
 
@@ -333,7 +439,6 @@
       carregarPostagens();
     }
 
-    // Busca os posts no banco (com ou sem filtro)
     async function carregarPostagens() {
       let query = supabaseClient
         .from("postagens")
@@ -356,17 +461,16 @@
       const { data: postagens, error } = await query;
 
       if (error) {
-        feedEl.innerHTML = "<p>Erro ao carregar postagens.</p>";
+        feedEl.innerHTML = "<p style='text-align:center;'>Erro ao carregar postagens.</p>";
         console.error(error);
         return;
       }
 
       if (postagens.length === 0) {
-        feedEl.innerHTML = "<p>Nenhuma postagem encontrada com esses critérios.</p>";
+        feedEl.innerHTML = "<p style='text-align:center; color: var(--text-muted);'>Nenhuma postagem encontrada.</p>";
         return;
       }
 
-      // Obtém as curtidas salvas nesta máquina
       const curtidasLocais = getCurtidasLocais();
 
       feedEl.innerHTML = "";
@@ -379,30 +483,30 @@
           .map(c => `<li>${c}</li>`)
           .join("");
 
-        // Checa se o post atual já foi curtido localmente
         const jaCurtido = curtidasLocais.includes(post.id);
+        const qtdLikes = post.likes || 0;
 
         card.innerHTML = `
-          <div class="box emoji-box">${post.emoji || '𖹭'}</div>
-          <div class="box texto-box">${post.texto}</div>
-          <div class="box hashtags-box">${hashtagsTexto}</div>
+          ${post.emoji ? `<div class="emoji-box">${post.emoji}</div>` : ''}
+          <div class="texto-box">${post.texto}</div>
+          ${hashtagsTexto ? `<div class="hashtags-box">${hashtagsTexto}</div>` : ''}
           
-          <div class="box likes-box">
-            <span>❤︎ ${post.likes || 0} Likes</span>
+          <div class="likes-box">
+            <span>❤️ ${qtdLikes} ${qtdLikes === 1 ? 'curtida' : 'curtidas'}</span>
             <button 
               class="btn-like" 
-              onclick="curtirPost(${post.id}, ${post.likes || 0})"
+              onclick="curtirPost(${post.id}, ${qtdLikes})"
               ${jaCurtido ? 'disabled' : ''}
             >
               ${jaCurtido ? 'Curtido' : 'Curtir'}
             </button>
           </div>
 
-          <div class="box comentarios-box">
-            <strong>Comentários:</strong>
-            <ul class="lista-comentarios">${listaComentariosHTML}</ul>
+          <div class="comentarios-box">
+            <span class="comentarios-titulo">Comentários</span>
+            ${listaComentariosHTML ? `<ul class="lista-comentarios">${listaComentariosHTML}</ul>` : ''}
             <form class="form-comentario" onsubmit="adicionarComentario(event, ${post.id}, ${JSON.stringify(post.comentarios || []).replace(/"/g, '&quot;')})">
-              <input type="text" placeholder="Comentar..." required />
+              <input type="text" placeholder="Escreva um comentário..." required />
               <button type="submit">Enviar</button>
             </form>
           </div>
@@ -413,7 +517,6 @@
     }
 
     async function curtirPost(id, likesAtuais) {
-      // Bloqueio de segurança no código antes da chamada da API
       const curtidasLocais = getCurtidasLocais();
       if (curtidasLocais.includes(id)) return;
 
@@ -423,7 +526,7 @@
         .eq("id", id);
 
       if (!error) {
-        salvarCurtidaLocal(id); // Registra a curtida no navegador do usuário
+        salvarCurtidaLocal(id);
         carregarPostagens();
       }
     }
